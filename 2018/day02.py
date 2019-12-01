@@ -8,6 +8,9 @@ def compare_serials(s1, s2):
   for i in range(len(s1)):
     if s1[i] != s2[i]:
       misses += 1
+    # if more than one miss, no need to contiue
+    if misses > 1:
+        return 2
   return misses
 
 def main():
