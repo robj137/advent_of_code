@@ -26,7 +26,7 @@ def main():
     print('Part 2: Actual fuel requirement: {}'.format(fuel_2))
 
 if __name__ == '__main__':
-  begin = dt.datetime.now()
-  main()
-  diff_time = dt.datetime.now() - begin
-  print('That took {:.3f} seconds'.format(diff_time.seconds + 1e-6*diff_time.microseconds))
+    begin = dt.datetime.now()
+    main()
+    diff_time = dt.datetime.now() - begin
+    print('That took {:.3f} seconds'.format(diff_time.seconds + 1e-6*diff_time.microseconds))
