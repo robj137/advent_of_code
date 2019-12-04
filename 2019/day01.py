@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import datetime as dt
+from datetime import datetime as dt
 
 def get_data():
     in_file = 'inputs/day01.txt'
@@ -26,7 +27,7 @@ def main():
     print('Part 2: Actual fuel requirement: {}'.format(fuel_2))
 
 if __name__ == '__main__':
-    begin = dt.datetime.now()
+    begin = dt.now()
     main()
-    diff_time = dt.datetime.now() - begin
-    print('That took {:.3f} seconds'.format(diff_time.seconds + 1e-6*diff_time.microseconds))
+    diff_time = dt.now() - begin
+    print('That took {:.6f} seconds'.format(diff_time.seconds + 1e-6*diff_time.microseconds))
