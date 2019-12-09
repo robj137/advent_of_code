@@ -20,15 +20,10 @@ class IntCode:
 
     def run(self, input_value=None):
         self.waiting = False
-        # will run from the current state until it halts or needs input
         if input_value:
             self.input.append(input_value)
         while not self.finished and not self.waiting:
-        #while not self.output and not self.finished:
             self.process_step()
-        #if self.output:
-        #    return self.output.pop()
-        #return None
         return self.output
     
     def process_step(self):
