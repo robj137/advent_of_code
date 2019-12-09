@@ -2,14 +2,21 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 from datetime import datetime as dt
+from intcode import IntCode
+from collections import defaultdict
 
-def get_data():
-    in_file = 'inputs/day02.test.txt'
-    in_file = 'inputs/day02.txt'
+def get_data(is_test=False):
+    if is_test:
+        in_file = 'inputs/day02.test.txt'
+    else:
+        in_file = 'inputs/day02.txt'
+    
     with open(in_file) as f:
-        lines = f.read()
-    return [int(x) for x in lines.split(',')]
-
+        vals = [int(x) for x in f.read().split(',')]
+    program = defaultdict(int)
+    for i in range(len(vals)):
+        program[i] = vals[i]
+    return program
 
 def compute(data, noun, verb):
     data[1] = noun
@@ -29,12 +36,19 @@ def compute(data, noun, verb):
 
 def main():
     data = get_data()
-    part_1_answer = compute(data[:], 12, 2)
-    print('Part 1: {}'.format(part_1_answer))
-
+    program = data.copy()
+    program[1] = 12
+    program[2] = 2
+    computer = IntCode(program)
+    computer.run()
+    print('Part 1: {}'.format(computer.program[0]))
     for noun in range(1,100):
         for verb in range(1,100):
-            if compute(data[:], noun, verb) == 19690720:
+            computer.reset(data.copy())
+            computer.program[1] = noun
+            computer.program[2] = verb
+            computer.run()
+            if computer.program[0] == 19690720:
                 print('Part 2: Noun*100 + Verb = {}'.format(100 * noun + verb))
                 return
 

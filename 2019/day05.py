@@ -1,13 +1,20 @@
 from datetime import datetime as dt
 import sys
+from collections import defaultdict
+from intcode import IntCode
 
-def get_data():
-    in_file = 'inputs/day05.test.txt'
-    in_file = 'inputs/day05.txt'
+def get_data(is_test=False):
+    if is_test:
+        in_file = 'inputs/day05.test.txt'
+    else:
+        in_file = 'inputs/day05.txt'
+    
     with open(in_file) as f:
-        values = [int(x) for x in f.read().split(',')]
-    return values
-
+        vals = [int(x) for x in f.read().split(',')]
+    program = defaultdict(int)
+    for i in range(len(vals)):
+        program[i] = vals[i]
+    return program
 
 def process(data, io):
     input_value = io[0]
@@ -59,14 +66,14 @@ def process(data, io):
 
 def main():
     data = get_data()
-    
-    io1 = [1, []]
-    io2 = [5, []]
-    
-    process(data[:], io1)
-    process(data[:], io2)
-    print('Part 1: {}'.format(io1[1][-1]))
-    print('Part 2: {}'.format(io2[1][-1]))
+    computer1 = IntCode(data.copy())
+    computer1.input.append(1)
+    computer2 = IntCode(data.copy())
+    computer2.input.append(5)
+    part_a = computer1.run()
+    part_b = computer2.run()
+    print('Part 1: {}'.format(part_a[-1]))
+    print('Part 2: {}'.format(part_b[-1]))
 
 if __name__ == '__main__':
     begin = dt.now()

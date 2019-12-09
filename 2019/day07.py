@@ -1,7 +1,8 @@
 from datetime import datetime as dt
 import sys
 from itertools import permutations
-from collections import deque
+from collections import deque, defaultdict
+from intcode import IntCode
 
 class Amplifier:
     def __init__(self, program, phase_factor):
@@ -67,24 +68,31 @@ class Amplifier:
                 self.program[self.program[self.counter+3]] = 0
             self.counter += 4
         
-def get_program():
-    in_file = 'inputs/day07.test.txt'
-    in_file = 'inputs/day07.txt'
+def get_program(is_test=False):
+    if is_test:
+        in_file = 'inputs/day07.test.txt'
+    else:
+        in_file = 'inputs/day07.txt'
     
     with open(in_file) as f:
         vals = [int(x) for x in f.read().split(',')]
-    return vals
+    program = defaultdict(int)
+    for i in range(len(vals)):
+        program[i] = vals[i]
+    return program
 
 def perform_round(program, phases):
     amps = []
     input_signal = 0
     for phase in phases:
-        amps.append(Amplifier(program[:], phase))
+        amps.append(IntCode(program.copy()))
+        amps[-1].input.append(phase)
     amps = deque(amps)
     while amps:
-        output = amps[0].run(input_signal)
+        amps[0].input.append(input_signal)
+        output = amps[0].run()
         if output:
-            input_signal = output
+            input_signal = output.pop()
         if amps[0].finished:
             amps.popleft()
         else:
@@ -92,11 +100,11 @@ def perform_round(program, phases):
     return input_signal
 
 def main():
-    program = get_program()
+    program = get_program(False)
     phase_array = permutations([0,1,2,3,4])
     values = []
     for phases in phase_array:
-        values.append((perform_round(program[:], phases), phases))
+        values.append((perform_round(program.copy(), phases), phases))
     part_a = max(values)[0]
     
     phase_array = permutations([5,6,7,8,9])
