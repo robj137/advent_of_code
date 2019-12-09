@@ -12,7 +12,8 @@ class Amplifier:
         self.counter = 0
         self.finished = False
 
-    def turn_crank(self, input_value):
+    def run(self, input_value):
+        # will run from the current state until it halts or needs input
         self.input.append(input_value)
         while not self.output and not self.finished:
             self.process_step()
@@ -81,7 +82,7 @@ def perform_round(program, phases):
         amps.append(Amplifier(program[:], phase))
     amps = deque(amps)
     while amps:
-        output = amps[0].turn_crank(input_signal)
+        output = amps[0].run(input_signal)
         if output:
             input_signal = output
         if amps[0].finished:

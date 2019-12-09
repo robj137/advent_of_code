@@ -2,6 +2,8 @@ import re
 import numpy as np
 from datetime import datetime as dt
 from collections import defaultdict
+import heapq
+import pickle
 
 class Node():
     def __init__(self, x, y, size, used, avail, use_perc):
@@ -12,9 +14,9 @@ class Node():
         self.avail = avail
         self.use_perc = use_perc
         self.up = self.left = self.right = self.down = None
-    
-    def get_avail(self):
-        return self.avail
+        self.connected = []
+        self.contains_payload = False
+
 
     def add(self, x):
         if x < self.avail:
@@ -40,7 +42,7 @@ class Node():
             target = self.left
         if neighbor == 'right':
             target = self.right
-        if target.get_avail() > self.used:
+        if target.avail > self.used:
             xfer = target.remove()
             if xfer <= self.avail:
                 self.add(xfer)
@@ -59,7 +61,7 @@ class Node():
             target = self.left
         if neighbor == 'right':
             target = self.right
-        if target.get_avail() > self.used:
+        if target.avail > self.used:
             xfer = self.remove()
             if xfer <= target.avail:
                 target.add(xfer)
@@ -70,6 +72,7 @@ class Node():
 
 class Grid():
     def __init__(self, nodes):
+        self.payload_location = None, None
         x_len, y_len = self.get_extent(nodes)
         self.node_map = [[None] * x_len]*y_len
         self.node_map = np.array(self.node_map)
@@ -90,16 +93,42 @@ class Grid():
                 node = self.node_map[y, x]
                 if y != 0:
                     node.up = self.node_map[y-1, x]
+                    node.connected.append(node.up)
                 if y != y_len - 1:
                     node.down = self.node_map[y+1, x]
+                    node.connected.append(node.down)
                 if x != 0:
                     node.left = self.node_map[y, x-1]
+                    node.connected.append(node.left)
                 if x != x_len - 1:
                     node.right = self.node_map[y, x+1]
-    
+                    node.connected.append(node.right)
+        self.node_map = self.node_map.transpose()
+
+    def get_payload_distance_to_goal(self):
+        x, y = self.payload_location
+        return x + y
+
+    def set_payload_location(self, x, y):
+        self.payload_location = x, y
+
     def __getitem__(self, key):
         a, b = key
-        return self.node_map[b, a]
+        return self.node_map[a, b]
+
+    def stringify(self):
+        return pickle.dumps(self)
+
+
+    def print(self, metric = 'avail'):
+        pic = []
+        width, height = self.node_map.shape
+        for i in range(height):
+            pixel_row = self.node_map[:,i]
+            pic.append(['{}/{} '.format(x.used, x.avail + x.used).rjust(7) for x in pixel_row])
+
+        [print(''.join(x)) for x in pic]
+
 
     def get_extent(self, nodes):
         x_max = y_max = 0
@@ -112,9 +141,20 @@ class Grid():
                 y_max = y
         return x_max+1, y_max+1
 
-
+    def get_viable_pairs(self):
+        viable_pairs = []
+        for i in range(len(self.node_list)):
+            node_a = self.node_list[i]
+            for j in range(len(self.node_list)):
+                node_b = self.node_list[j]
+                if node_a.used and node_b.avail > node_a.used and node_a != node_b:
+                    viable_pairs.append((node_a, node_b))
+        
+        return viable_pairs
+         
 def get_nodes():
     path = 'inputs/day22.txt'
+    #path = 'inputs/day22.test.txt'
     with open(path) as f:
         lines = f.readlines()
     tops = lines[0:2]
@@ -131,57 +171,35 @@ def get_nodes():
 
     return nodes
 
-def get_viable_pairs(nodes):
-    node_keys = [x for x in nodes.keys()]
-    n_pairs = []
-    for key in node_keys:
-        node = nodes[key]
-        for key2 in node_keys:
-            node2 = nodes[key2]
-            if key != key2 and node['Used'] != 0 and node['Used'] < node2['Avail']:
-                n_pairs.append((key, key2))
-    return n_pairs
+def optimize_moves(grid_snapshot):
+    # the 'target' is when the payload is in its place in the grid (0,0)
+    # a state is a snapshot of a grid
+    # a valid 'move' between two grid snapshots is a transfer of data from
+    # one node to a neighboring node.
+    # 
+    p1 = (0, grid_snapshot.stringify())
+    visited = {}
 
-def check_connected(pair):
-    a, b = pair
-    ax = int(a[0][1:])
-    ay = int(a[1][1:])
-    bx = int(b[0][1:])
-    by = int(b[1][1:])
-    if abs(ax-bx) == 1 and abs(ay-by) == 0 or abs(ax-bx) == 0 and abs(ay-by) == 1:
-        return True
-    return False
+    heap = []
+    heapq.heappush(heap, [0, 0, p1, [p1] ])
+    while heap:
+        _, path_cost, 
+    pass
 
-def get_viable_conected_pairs(nodes):
-    pairs = get_viable_pairs(nodes)
-    connected = []
-    for pair in pairs:
-        if check_connected(pair):
-            connected.append(pair)
-    return connected
+def get_heuristic(grid_snapshot):
+    # manhattan distance to target from current cell
+    distance = grid_snapshot.get_payload_distance_to_goal()
+    return distance
 
-def part1():
-    nodes = get_nodes()
-    pairs = get_viable_pairs(nodes)
-    print(len(pairs))
-    for a, b in pairs:
-        if b != ('x35', 'y18'):
-            print(a,b)
-
-
-def part2():
-    nodes = get_nodes()
-    
-    connected = get_viable_conected_pairs(nodes)
-    print(connected)
-
-    grid = Grid(nodes)
 
 def main():
+    nodes = get_nodes()
+    grid = Grid(nodes)
+    pairs = grid.get_viable_pairs()
+    part_1 = len(pairs)
+    print("Part 1: Number of viable pairs: {}".format(part_1))
     
-    part1()
-    part2()
-
+    grid.print()
 if __name__ == '__main__':
     begin = dt.now()
     main()
