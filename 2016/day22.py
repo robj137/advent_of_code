@@ -189,6 +189,7 @@ def optimize_moves(grid_snapshot):
 def get_heuristic(grid_snapshot):
     # manhattan distance to target from current cell
     distance = grid_snapshot.get_payload_distance_to_goal()
+    # will almost certainly need a "hint" to 
     return distance
 
 

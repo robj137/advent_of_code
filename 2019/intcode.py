@@ -118,9 +118,9 @@ class IntCode:
         # 3: 1 arg: self.first_arg arg is 0 or 2
     
         if self.opcode in [1,2,3,7,8]:
-            to_write_parameter_index = 2 if self.opcode in [1,2,7,8] else 0
-            offset = self.relative_base if self.params[to_write_parameter_index] == 2 else 0
-            self.write_index = self.program[self.counter + to_write_parameter_index + 1] + offset
+            write_par_index = 2 if self.opcode in [1,2,7,8] else 0
+            offset = self.relative_base if self.params[write_par_index] == 2 else 0
+            self.write_index = self.program[self.counter + write_par_index + 1] + offset
         else:
             self.write_index = None
         

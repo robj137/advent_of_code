@@ -56,8 +56,9 @@ def main():
             pixel_rows[y, x] = ' ' if color == 0 else '█'
                 
     print('Part 1: {}'.format(part_a))
-    print('Part 2: ')
-    [print(''.join(x)) for x in pixel_rows]
+    print('Part 2: ----------------------------------')
+    [print('       ', ''.join(x)) for x in pixel_rows]
+    print('------------------------------------------')
 
 if __name__ == '__main__':
     begin = dt.now()

@@ -31,8 +31,8 @@ def main():
     part_a = computer1.run(1)
     part_b = computer2.run(2)
     
-    print('Part 1: {}'.format(part_a))
-    print('Part 2: {}'.format(part_b))
+    print('Part 1: {}'.format(part_a[-1]))
+    print('Part 2: {}'.format(part_b[-1]))
 
 if __name__ == '__main__':
     begin = dt.now()
