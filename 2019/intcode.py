@@ -132,3 +132,6 @@ class IntCode:
         self.set_opcode_and_params()
         func = self.switcher.get(self.opcode)
         return func()
+
+    def set_register(self, address, value):
+        self.program[address] = value

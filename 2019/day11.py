@@ -83,9 +83,9 @@ def part2(data):
     df = pd.DataFrame(pairs)
     
     # uncommnt below to show using matplotlib
-    df.plot.scatter(x=0, y=1, marker='s')
-    plt.show()
-    input()
+    #df.plot.scatter(x=0, y=1, marker='s')
+    #plt.show()
+    #input()
 
     return 'RFEPCFEB'
 
