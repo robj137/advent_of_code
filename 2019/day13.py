@@ -15,6 +15,7 @@ class Arcade:
         self.paddle_x = 0
         self.cheat = False
         self.n_turns = 0
+        self.show_turns = False
 
     def show_score(self):
         print(self.score)
@@ -49,7 +50,6 @@ class Arcade:
             output_data = self.computer.run()
             self.print_screen(self.computer.output[:])
             self.get_joystick_input()
-            time.sleep(0.01)
 
     def print_screen(self, output):
             
@@ -59,8 +59,8 @@ class Arcade:
            output = output[3:]
         char_dict = {}
         char_dict[0] = ' '
-        char_dict[1] = '█'
-        char_dict[2] = '▒'
+        char_dict[1] = '+'
+        char_dict[2] = '█'
         char_dict[3] = '-'
         char_dict[4] = 'O'
         for el in stuff:
@@ -73,9 +73,10 @@ class Arcade:
                 self.paddle_x = x
             if z == 4:
                 self.ball_x = x
-        # uncomment below to watch 
-        print('Score is {}'.format(self.score))
-        [print(z) for z in [''.join(y) for y in self.screen]]
+        if self.show_turns:
+            print('Score is {}'.format(self.score))
+            [print(z) for z in [''.join(y) for y in self.screen]]
+            time.sleep(0.01)
    
 def get_data(is_test=False):
     if is_test:
@@ -120,6 +121,8 @@ def part2(data):
     arcade = Arcade(computer)
     arcade.cheat = True
     arcade.put_a_quarter_in()
+    if len(sys.argv) > 1:
+        arcade.show_turns = bool(sys.argv[1])
     arcade.play()
     print('That took {} turns'.format(arcade.n_turns))
     return arcade.score
@@ -127,7 +130,6 @@ def part2(data):
 def main():
  
     is_test = False
-
     part_a = part1(get_data(is_test))
     part_b = part2(get_data(is_test))
     
