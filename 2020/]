@@ -1,0 +1,47 @@
+import datetime as dt
+from collections import Counter, defaultdict
+from datetime import datetime as dt
+import numpy as np
+import re
+
+
+def get_data(is_test=False):
+    if is_test:
+        in_file = 'inputs/day08.test.txt'
+    else:
+        in_file = 'inputs/day08.txt'
+    
+    with open(in_file) as f:
+        lines = [x.strip() for x in f.readlines()]
+ 
+    return lines
+
+
+
+def main():
+    data = get_data(True)
+    instructions_performed = {}
+    index = 0
+    acc = 0
+    while 1:
+        if index in instructions_performed:
+            break
+        instructions_performed[index] = 0
+        instruction, val = data[index].split(' ')
+        #print(index, instruction, val, acc)
+        if instruction == 'nop':
+            index += 1
+        if instruction == 'acc':
+            acc += int(val)
+            index += 1
+        if instruction == 'jmp':
+            index += int(val)
+
+
+    print(acc)
+
+if __name__ == '__main__':
+    begin = dt.now()
+    main()
+    diff_time = dt.now() - begin
+    print('That took {:.6f} seconds'.format(diff_time.seconds + 1e-6*diff_time.microseconds))
