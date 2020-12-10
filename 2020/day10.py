@@ -17,24 +17,17 @@ def get_data(is_test=False):
     return lines
 
 def get_clean_data(is_test=True):
-    if is_test:
-        n_pre = 5
-    else:
-        n_pre = 25
     data = get_data(is_test)
-    
     built_in_joltage = max(data) + 3
-    data.append(built_in_joltage)
-    data.append(0) 
+    data.append(max(data) + 3)  # built-in joltage
+    data.append(0)  # charging outlet joltage
     data.sort()
     data.reverse()
     return data
 
-    part1(data)
-    part2(data)
-
 def part1(data):
-
+    # we've already sorted and reversed the data, so just 
+    # keep tabs on the joltage differences
     diffs = []
     adapters = data[:]
     joltage = adapters.pop()
@@ -44,7 +37,7 @@ def part1(data):
         diffs.append(diff)
         joltage = new_joltage
     
-
+    # cheat by using Counter library, and grab the '1' and '3' diffs
     c = Counter(diffs)
     n1 = c[1]
     n3 = c[3]
@@ -52,13 +45,19 @@ def part1(data):
     print('Part 1: Number of 3-jolt diffs time 1-jolt diffs: {}'.format(n1 * n3))
 
 def part2(data):
+    # just start at one end and keep track of all the ways each adapter can connect
+    # to the adapters that came before
     data = data[:]
     m = {}
+    
+    # start at one end, and there's only one way to do that :)
     el = data.pop(0)
     m[el] = 1
     while data:
         el = data.pop(0)
         multiplier = 0
+        # this wouldn't really scale (i mean it would scale like N^2), but it's fine for this
+        # could just keep a short list of the last three elements instead check thoe instead
         for key in m:
             if key - el <= 3:
                 multiplier += m[key]
