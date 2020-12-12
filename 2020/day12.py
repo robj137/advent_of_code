@@ -21,13 +21,16 @@ def get_data(is_test=False):
         directions.append((instruction, value))
     return directions
 
-def part1(data):
+def get_directions_dict():
     directions = {}
     directions['N'] = 1j
     directions['E'] = 1
     directions['S'] = -1j
     directions['W'] = -1
+    return directions
 
+def part1(data):
+    directions = get_directions_dict()
     pos = 0 + 0j
     momentum = 1
 
@@ -42,17 +45,13 @@ def part1(data):
                 val -= 90
         elif i == 'F':
             pos += momentum * val
-    return abs(pos.imag) +abs(pos.real)
+    return int(abs(pos.imag) +abs(pos.real))
 
 def part2(data):
     waypoint = 10 + 1j
     pos = 0 + 0j
 
-    directions = {}
-    directions['N'] = 1j
-    directions['E'] = 1
-    directions['S'] = -1j
-    directions['W'] = -1
+    directions = get_directions_dict()
 
     for i, val in data:
         if i in directions.keys():
@@ -64,7 +63,7 @@ def part2(data):
                 val -= 90
         elif i == 'F':
             pos += waypoint * val
-    return abs(pos.imag) + abs(pos.real)
+    return int(abs(pos.imag) + abs(pos.real))
 
 
 if __name__ == '__main__':
