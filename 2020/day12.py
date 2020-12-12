@@ -14,31 +14,31 @@ def get_data(is_test=False):
     with open(in_file) as f:
         lines = [x.strip() for x in f.readlines()]
 
-    directions = []
+    steps = []
     for line in lines:
         instruction = line[0]
         value = int(line[1:])
-        directions.append((instruction, value))
-    return directions
+        steps.append((instruction, value))
+    return steps
 
-def get_directions_dict():
-    directions = {}
-    directions['N'] = 1j
-    directions['E'] = 1
-    directions['S'] = -1j
-    directions['W'] = -1
-    return directions
+def get_directionals_dict():
+    directionals = {}
+    directionals['N'] = 1j
+    directionals['E'] = 1
+    directionals['S'] = -1j
+    directionals['W'] = -1
+    return directionals
 
 def part1(data):
-    directions = get_directions_dict()
+    directionals = get_directionals_dict()
     pos = 0 + 0j
     momentum = 1
 
     for i, val in data:
-        if i in directions:
-            pos += directions[i] * val
+        if i in directionals:
+            pos += directionals[i] * val
         elif i in ['R','L']:
-            # directionchange
+            # momentum change
             rot = 1 if i == 'R' else -1
             while val:
                 momentum *= ((-1j) * rot)
@@ -51,11 +51,11 @@ def part2(data):
     waypoint = 10 + 1j
     pos = 0 + 0j
 
-    directions = get_directions_dict()
+    directionals = get_directionals_dict()
 
     for i, val in data:
-        if i in directions.keys():
-            waypoint += directions[i] * val
+        if i in directionals.keys():
+            waypoint += directionals[i] * val
         elif i in ['L', 'R']:
             rot = 1 if i == 'R' else -1
             while val:
