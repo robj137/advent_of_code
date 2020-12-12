@@ -40,9 +40,7 @@ def part1(data):
         elif i in ['R','L']:
             # momentum change
             rot = 1 if i == 'R' else -1
-            while val:
-                momentum *= ((-1j) * rot)
-                val -= 90
+            momentum *= ((-1j) * rot) ** (val / 90)
         elif i == 'F':
             pos += momentum * val
     return int(abs(pos.imag) +abs(pos.real))
@@ -58,9 +56,7 @@ def part2(data):
             waypoint += directionals[i] * val
         elif i in ['L', 'R']:
             rot = 1 if i == 'R' else -1
-            while val:
-                waypoint *= ((-1j) * rot)
-                val -= 90
+            waypoint *= ((-1j) * rot) ** (val / 90)
         elif i == 'F':
             pos += waypoint * val
     return int(abs(pos.imag) + abs(pos.real))
