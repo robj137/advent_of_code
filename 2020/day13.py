@@ -47,7 +47,6 @@ def part1(earliest, shuttles):
 
 
 def part2(shuttles):
-    og_shuttles = shuttles[:]
     offset = 0
     multiplier = 1
     for i, shuttle in enumerate(shuttles):
