@@ -49,16 +49,19 @@ def part1(earliest, shuttles):
 def part2(shuttles):
     offset = 0
     multiplier = 1
+    steps = 0
     for i, shuttle in enumerate(shuttles):
         if shuttle < 0:
             continue
         
         candidates_a = [x for x in range(offset, multiplier * shuttle, multiplier)]
         for candidate in candidates_a:
+            steps += 1
             if (candidate + i) % shuttle == 0:
                 match = candidate
         offset = match
         multiplier *= shuttle
+    print('that took {} steps'.format(steps))
     return offset
 
 
