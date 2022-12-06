@@ -25,7 +25,7 @@ def get_instructions(instructs):
         instructions.append([int(x) for x in re.search(pat, line).groups()])
     return instructions
 
-def get_initial_state_and_instructions(lines):
+def parse_input(lines):
     """Find the blank line, split the input on that, and let's rock."""
     blank_line = lines.index('')
     return (
@@ -46,10 +46,10 @@ if __name__ == '__main__':
     with open('inputs/day05.txt') as f:
         lines = [x.strip('\n') for x in f.readlines()]
     
-    state, instructions = get_initial_state_and_instructions(lines)
+    state, instructions = parse_input(lines)
     top_of_stack = rearrange(state, instructions, 1)
     print('part 1:', top_of_stack)
     
-    state, instructions = get_initial_state_and_instructions(lines)
+    state, instructions = parse_input(lines)
     top_of_stack = rearrange(state, instructions, -1)
     print('part 2:', top_of_stack)
