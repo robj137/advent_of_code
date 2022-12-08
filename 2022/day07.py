@@ -34,7 +34,7 @@ def parse_input():
             elif cmd == '$ cd ..':
                 cwd = cwd.parent
             elif cmd[0:5] == '$ cd ':
-                cwd = cwd.subfolders[cmd.split('cd ')[-1]]
+                cwd = cwd.subfolders[cmd[5:]]
             else:
                 pass # it's an ls command
         else: #not a command, so results of ls
