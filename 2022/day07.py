@@ -33,26 +33,20 @@ def parse_input():
                 cwd = root
             elif cmd == '$ cd ..':
                 cwd = cwd.parent
-            elif cmd == '$ ls':
-                continue
-            else:
+            elif cmd[0:5] == '$ cd ':
                 cwd = cwd.subfolders[cmd.split('cd ')[-1]]
+            else:
+                pass # it's an ls command
         else: #not a command, so results of ls
             first, second = cmd.split()
             if first == 'dir':
-                if second in cwd.subfolders:
-                    print("oh shit")
                 cwd.subfolders[second] = Folder(second)
                 cwd.subfolders[second].parent = cwd
                 cwd.subfolders[second].full_path = cwd.full_path + second + '/'
             else:
-                if second in cwd.files:
-                    print("oh snap")
                 cwd.files[second] = File(second, first)
     return root
 
-                
-        
 
 if __name__ == '__main__':
     root = parse_input()
