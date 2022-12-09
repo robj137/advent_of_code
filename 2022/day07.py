@@ -25,7 +25,6 @@ def parse_input():
     cwd = None
     for cmd in cmds:
         if cmd[0] == '$':
-            # directory command, nuke previous cmd
             if cmd == '$ cd /':
                 # let's start things off
                 root = Folder('/')
@@ -57,13 +56,11 @@ if __name__ == '__main__':
         if f.name not in folder_dict:
             folder_dict[f.full_path] = f.get_total_size()
             queue.extend([f.subfolders[x] for x in f.subfolders])
-    small = {key:value for (key, value) in folder_dict.items() if value <= 100000}
+    small = {k:v for (k, v) in folder_dict.items() if v <= 100000}
     print('part 1:', sum([small[x] for x in small]))
     
     total_disk_space = 70000000
-    total_size = root.get_total_size()
-    unused_space = total_disk_space - total_size
+    unused_space = total_disk_space - root.get_total_size()
     needed_space = 30000000 - unused_space
-    big = {key:value for (key, value) in folder_dict.items() if value > needed_space}
+    big = {k:v for (k, v) in folder_dict.items() if v > needed_space}
     print('part 2:', big[min(big, key=big.get)])
-    #print(big)

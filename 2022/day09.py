@@ -1,6 +1,5 @@
 from collections import defaultdict
 
-dir_dict = {'R': 1, 'U': 1j, 'L': -1, 'D': -1j}
 
 def get_data():
     with open('inputs/day09.txt') as f:
@@ -21,6 +20,7 @@ class Node:
         self.pos_dict = defaultdict(int)
         self.pos_dict[self.pos] += 1
         self.history = [self.pos]
+        self.dir_dict = {'R': 1, 'U': 1j, 'L': -1, 'D': -1j}
         
         child = 1 if name == 'H' else int(name) + 1
         if child:
@@ -34,13 +34,13 @@ class Node:
     def adjust_pos(self, instruct=None):
         if instruct and self.name == 'H':
             direction, num = instruct
-            impulse = dir_dict[direction]
+            impulse = self.dir_dict[direction]
             for i in range(num):
                 self.pos += impulse
                 self.pos_dict[self.pos] += 1
                 self.history.append(self.pos)
                 self.child.adjust_pos()
-        else:
+        else: # let's propagate the parent's changes down the line...
             self.pos = self.get_new_pos()
             self.pos_dict[self.pos] += 1
             self.history.append(self.pos)
@@ -49,10 +49,10 @@ class Node:
             
     def get_new_pos(self):
         diff_mod = get_modulus(self.parent.pos - self.pos)
-        if diff_mod < 2:
+        if diff_mod < 2: # we're in a good place, so leave it
             return self.pos
         impulses = [1, -1, 1j, -1j]
-        if diff_mod != int(diff_mod):
+        if diff_mod != int(diff_mod): # off by diag, so have to move diag
             impulses = [1 + 1j, 1 - 1j, -1 + 1j, -1 - 1j]
         for impulse in impulses:
             new_pos = self.pos + impulse
@@ -70,16 +70,13 @@ if __name__ == '__main__':
         h10.adjust_pos(x)
     
     node2 = h2
-    node10 = h10
-    # get the last knot node
     while node2.child:
         node2 = node2.child
    
+    node10 = h10
     while node10.child:
         node10 = node10.child
 
-
     print('part 1:', len(node2.pos_dict))
     print('part 2:', len(node10.pos_dict))
-
-
+    # print(len(node10.history))
