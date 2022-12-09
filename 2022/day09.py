@@ -11,7 +11,7 @@ def get_modulus(x):
     return (x.imag**2 + x.real**2)**0.5
 
 
-class Node:
+class Knot:
     def __init__(self, name, parent=None, rope_length=10):
         self.name = name
         self.parent = parent
@@ -25,7 +25,7 @@ class Node:
         child = 1 if name == 'H' else int(name) + 1
         if child:
             if child < rope_length:
-                self.child = Node(
+                self.child = Knot(
                     name=child,
                     parent=self,
                     rope_length=rope_length
@@ -63,8 +63,8 @@ class Node:
 if __name__ == '__main__':
     data = get_data()
     
-    h2 = Node('H', rope_length=2)
-    h10 = Node('H', rope_length=10)
+    h2 = Knot('H', rope_length=2)
+    h10 = Knot('H', rope_length=10)
     for x in data:
         h2.adjust_pos(x)
         h10.adjust_pos(x)
