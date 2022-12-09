@@ -62,17 +62,24 @@ class Node:
 
 if __name__ == '__main__':
     data = get_data()
-    rope_length = 10
-    h = Node('H', rope_length=rope_length)
-
-    for x in data:
-        h.adjust_pos(x)
     
-    node = h
+    h2 = Node('H', rope_length=2)
+    h10 = Node('H', rope_length=10)
+    for x in data:
+        h2.adjust_pos(x)
+        h10.adjust_pos(x)
+    
+    node2 = h2
+    node10 = h10
     # get the last knot node
-    while node.child:
-        node = node.child
+    while node2.child:
+        node2 = node2.child
    
-    print(len(node.pos_dict))
-    print(node.history)
-    print(len(node.history))
+    while node10.child:
+        node10 = node10.child
+
+
+    print('part 1:', len(node2.pos_dict))
+    print('part 2:', len(node10.pos_dict))
+
+
