@@ -6,7 +6,7 @@ def get_data():
         lines = [x.strip() for x in f.readlines()]
     return lines
 
-class Communicator:
+class Device:
     def __init__(self, data):
         self.register = 1
         self.data = data
@@ -43,10 +43,10 @@ class Communicator:
 
 if __name__ == '__main__':
     data = get_data()
-    communicator = Communicator(data)
-    while communicator.instruction_index < len(communicator.data):
-        communicator.increment_cycle()
+    device = Device(data)
+    while device.instruction_index < len(device.data):
+        device.increment_cycle()
 
-    print('Part 1:', sum(communicator.interesting_signal_strengths))
+    print('Part 1:', sum(device.interesting_signal_strengths))
     print('Part 2:')
-    [print(''.join(x)) for x in np.array(communicator.crt).reshape(6,40)]
+    [print(''.join(x)) for x in np.array(device.crt).reshape(6,40)]
