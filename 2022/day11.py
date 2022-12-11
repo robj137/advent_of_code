@@ -64,23 +64,21 @@ class Monkey:
     def print_status(self):
         print("Status for Monkey", self.n, 'with items:', self.items, 'and ', self.inspections, 'inspections')
 
-if __name__ == '__main__':
+def do_monkey_business(n_rounds = 20, worry=False):
     data = get_data()
-    worry_free_monkeys = [Monkey(blurb, worry=False) for blurb in data]
-    worry_full_monkeys = [Monkey(blurb, worry=True) for blurb in data]
-    [x.set_troop(worry_free_monkeys) for x in worry_free_monkeys]
-    [x.set_troop(worry_full_monkeys) for x in worry_full_monkeys]
-    grand_divisor = np.prod([x.test_divisor for x in worry_full_monkeys])
-    [x.set_grand_divisor(grand_divisor) for x in worry_full_monkeys]
-    for i in range(20):
-        [x.do_turn() for x in worry_free_monkeys]
-    inspections = [x.inspections for x in worry_free_monkeys]
+    monkeys = [Monkey(blurb, worry=worry) for blurb in data]
+    [x.set_troop(monkeys) for x in monkeys]
+    grand_divisor = np.prod([x.test_divisor for x in monkeys])
+    [x.set_grand_divisor(grand_divisor) for x in monkeys]
+    for i in range(n_rounds):
+        [monkey.do_turn() for monkey in monkeys]
+    inspections = [monkey.inspections for monkey in monkeys]
     inspections.sort()
     inspections.reverse()
-    print('Part 1:', inspections[0] * inspections[1])
-    for i in range(10000):
-        [x.do_turn() for x in worry_full_monkeys]
-    inspections = [x.inspections for x in worry_full_monkeys]
-    inspections.sort()
-    inspections.reverse()
-    print('Part 2:', inspections[0] * inspections[1])
+    return inspections[0] * inspections[1]
+
+if __name__ == '__main__':
+    monkey_business_1 = do_monkey_business(20, False)
+    monkey_business_2 = do_monkey_business(10000, True)
+    print('Part 1:', do_monkey_business(20, False))
+    print('Part 2:', do_monkey_business(10000, True))
