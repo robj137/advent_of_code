@@ -1,8 +1,8 @@
 import numpy as np
 
 def get_data():
-    with open('inputs/day10.txt') as f:
-    #with open('inputs/day10.test.txt') as f:
+    #with open('inputs/day10.txt') as f:
+    with open('inputs/day10.test.txt') as f:
         lines = [x.strip() for x in f.readlines()]
     return lines
 
