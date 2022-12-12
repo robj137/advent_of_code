@@ -74,8 +74,7 @@ def do_monkey_business(n_rounds = 20, worry=False):
         [monkey.do_turn() for monkey in monkeys]
     inspections = [monkey.inspections for monkey in monkeys]
     inspections.sort()
-    inspections.reverse()
-    return inspections[0] * inspections[1]
+    return inspections[-1] * inspections[-2]
 
 if __name__ == '__main__':
     monkey_business_1 = do_monkey_business(20, False)
