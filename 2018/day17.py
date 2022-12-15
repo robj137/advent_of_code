@@ -1,7 +1,10 @@
+import sys
 import pandas as pd
 import numpy as np
 import datetime as dt
 import re
+
+sys.setrecursionlimit(2000)
 
 def main():
   lines = []
